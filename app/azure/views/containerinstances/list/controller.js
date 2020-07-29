@@ -1,29 +1,30 @@
+import _ from 'lodash-es';
+
 export class ContainerInstancesViewController {
-  constructor($state, AzureService, Notifications) {
-    Object.assign(this, { $state, AzureService, Notifications });
+  constructor($async, $state, AzureService, Notifications) {
+    Object.assign(this, { $async, $state, AzureService, Notifications });
+
+    this.containerGroups = [];
+
+    this.deleteActionAsync = this.deleteActionAsync.bind(this);
     this.deleteAction = this.deleteAction.bind(this);
     this.$onInit = this.$onInit.bind(this);
   }
 
   deleteAction(selectedItems) {
-    var actionCount = selectedItems.length;
-    angular.forEach(selectedItems, function (item) {
-      this.AzureService.deleteContainerGroup(item.Id)
-        .then(() => {
-          this.Notifications.success('Container group successfully removed', item.Name);
-          var index = this.containerGroups.indexOf(item);
-          this.containerGroups.splice(index, 1);
-        })
-        .catch((err) => {
-          this.Notifications.error('Failure', err, 'Unable to remove container group');
-        })
-        .finally(function final() {
-          --actionCount;
-          if (actionCount === 0) {
-            this.$state.reload();
-          }
-        });
-    });
+    return this.$async(this.deleteActionAsync, selectedItems);
+  }
+  async deleteActionAsync(selectedItems) {
+    for (let item of selectedItems) {
+      try {
+        await this.AzureService.deleteContainerGroup(item.Id);
+        this.Notifications.success('Container group successfully removed', item.Name);
+
+        _.remove(this.containerGroups, item);
+      } catch (err) {
+        this.Notifications.error('Failure', err, 'Unable to remove container group');
+      }
+    }
   }
 
   async $onInit() {
