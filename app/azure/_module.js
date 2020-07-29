@@ -33,7 +33,7 @@ angular.module('portainer.azure', ['portainer.app']).config([
       views: {
         'content@': {
           templateUrl: './views/containerinstances/list/template.html',
-          controller: 'AzureContainerInstancesController',
+          controller: 'AzureContainerInstancesController as $ctrl',
         },
       },
     };

@@ -1,6 +1,8 @@
 angular.module('portainer.azure').controller('AzureContainerInstancesController', AzureContainerInstancesController);
 
-function AzureContainerInstancesController($scope, $state, AzureService, Notifications) {
+function AzureContainerInstancesController($state, AzureService, Notifications) {
+  const vm = this;
+
   function initView() {
     AzureService.subscriptions()
       .then(function success(data) {
@@ -8,21 +10,22 @@ function AzureContainerInstancesController($scope, $state, AzureService, Notific
         return AzureService.containerGroups(subscriptions);
       })
       .then(function success(data) {
-        $scope.containerGroups = AzureService.aggregate(data);
+        vm.containerGroups = AzureService.aggregate(data);
       })
       .catch(function error(err) {
         Notifications.error('Failure', err, 'Unable to load container groups');
       });
   }
 
-  $scope.deleteAction = function (selectedItems) {
+  this.deleteAction = deleteAction;
+  function deleteAction(selectedItems) {
     var actionCount = selectedItems.length;
     angular.forEach(selectedItems, function (item) {
       AzureService.deleteContainerGroup(item.Id)
         .then(function success() {
           Notifications.success('Container group successfully removed', item.Name);
-          var index = $scope.containerGroups.indexOf(item);
-          $scope.containerGroups.splice(index, 1);
+          var index = vm.containerGroups.indexOf(item);
+          vm.containerGroups.splice(index, 1);
         })
         .catch(function error(err) {
           Notifications.error('Failure', err, 'Unable to remove container group');
@@ -34,7 +37,7 @@ function AzureContainerInstancesController($scope, $state, AzureService, Notific
           }
         });
     });
-  };
+  }
 
   initView();
 }
