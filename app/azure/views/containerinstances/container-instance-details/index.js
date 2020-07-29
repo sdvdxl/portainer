@@ -1,6 +1,8 @@
-import ContainerInstanceDetailsController from './containerInstanceDetailsController.js';
+import angular from 'angular';
+
+import { ContainerInstanceDetailsController } from './controller';
 
 angular.module('portainer.azure').component('containerInstanceDetails', {
-  templateUrl: './containerInstanceDetails.html',
+  templateUrl: './template.html',
   controller: ContainerInstanceDetailsController,
 });
