@@ -21,7 +21,6 @@ export const API_ENDPOINT_TEAMS = 'api/teams';
 export const API_ENDPOINT_TEAM_MEMBERSHIPS = 'api/team_memberships';
 export const API_ENDPOINT_TEMPLATES = 'api/templates';
 export const API_ENDPOINT_WEBHOOKS = 'api/webhooks';
-export const DEFAULT_TEMPLATES_URL = 'https://raw.githubusercontent.com/portainer/templates/master/templates.json';
 export const PAGINATION_MAX_ITEMS = 10;
 export const APPLICATION_CACHE_VALIDITY = 3600;
 export const CONSOLE_COMMANDS_LABEL_PREFIX = 'io.portainer.commands.';
@@ -48,7 +47,6 @@ angular
   .constant('API_ENDPOINT_TEAM_MEMBERSHIPS', 'api/team_memberships')
   .constant('API_ENDPOINT_TEMPLATES', 'api/templates')
   .constant('API_ENDPOINT_WEBHOOKS', 'api/webhooks')
-  .constant('DEFAULT_TEMPLATES_URL', 'https://raw.githubusercontent.com/portainer/templates/master/templates.json')
   .constant('PAGINATION_MAX_ITEMS', 10)
   .constant('APPLICATION_CACHE_VALIDITY', 3600)
   .constant('CONSOLE_COMMANDS_LABEL_PREFIX', 'io.portainer.commands.')
