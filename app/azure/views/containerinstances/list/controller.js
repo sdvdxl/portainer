@@ -5,20 +5,6 @@ export class ContainerInstancesViewController {
     this.$onInit = this.$onInit.bind(this);
   }
 
-  $onInit() {
-    this.AzureService.subscriptions()
-      .then((data) => {
-        var subscriptions = data;
-        return this.AzureService.containerGroups(subscriptions);
-      })
-      .then((data) => {
-        this.containerGroups = this.AzureService.aggregate(data);
-      })
-      .catch((err) => {
-        this.Notifications.error('Failure', err, 'Unable to load container groups');
-      });
-  }
-
   deleteAction(selectedItems) {
     var actionCount = selectedItems.length;
     angular.forEach(selectedItems, function (item) {
@@ -38,5 +24,15 @@ export class ContainerInstancesViewController {
           }
         });
     });
+  }
+
+  async $onInit() {
+    try {
+      const subscriptions = await this.AzureService.subscriptions();
+      const containerGroups = await this.AzureService.containerGroups(subscriptions);
+      this.containerGroups = this.AzureService.aggregate(containerGroups);
+    } catch (err) {
+      this.Notifications.error('Failure', err, 'Unable to load container groups');
+    }
   }
 }
