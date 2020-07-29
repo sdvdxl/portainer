@@ -53,8 +53,8 @@ angular.module('portainer.azure', ['portainer.app']).config([
       url: '/new/',
       views: {
         'content@': {
-          templateUrl: './views/containerinstances/create/createcontainerinstance.html',
-          controller: 'AzureCreateContainerInstanceController',
+          templateUrl: './views/containerinstances/create/template.html',
+          controller: 'AzureCreateContainerInstanceController as $ctrl',
         },
       },
     };
