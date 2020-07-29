@@ -1,47 +1,35 @@
+import angular from 'angular';
+
 import { ContainerGroupViewModel, CreateContainerGroupRequest } from '../models/container_group';
 
-angular.module('portainer.azure').factory('ContainerGroupService', [
-  '$q',
-  'ContainerGroup',
-  function ContainerGroupServiceFactory($q, ContainerGroup) {
-    'use strict';
-    var service = {};
+angular.module('portainer.azure').factory('ContainerGroupService', ContainerGroupServiceFactory);
 
-    service.containerGroups = function (subscriptionId) {
-      var deferred = $q.defer();
+function ContainerGroupServiceFactory(ContainerGroup) {
+  return { containerGroups, containerGroup, create };
 
-      ContainerGroup.query({ subscriptionId: subscriptionId })
-        .$promise.then(function success(data) {
-          var containerGroups = data.value.map(function (item) {
-            return new ContainerGroupViewModel(item);
-          });
-          deferred.resolve(containerGroups);
-        })
-        .catch(function error(err) {
-          deferred.reject({ msg: 'Unable to retrieve container groups', err: err });
-        });
-
-      return deferred.promise;
-    };
-
-    service.containerGroup = containerGroup;
-    async function containerGroup(subscriptionId, resourceGroupName, containerGroupName) {
-      const containerGroup = await ContainerGroup.get({ subscriptionId, resourceGroupName, containerGroupName }).$promise;
-      return new ContainerGroupViewModel(containerGroup);
+  async function containerGroups(subscriptionId) {
+    try {
+      const result = await ContainerGroup.query({ subscriptionId: subscriptionId }).$promise;
+      return result.value.map((item) => new ContainerGroupViewModel(item));
+    } catch (err) {
+      throw { msg: 'Unable to retrieve container groups', err };
     }
+  }
 
-    service.create = function (model, subscriptionId, resourceGroupName) {
-      var payload = new CreateContainerGroupRequest(model);
-      return ContainerGroup.create(
-        {
-          subscriptionId: subscriptionId,
-          resourceGroupName: resourceGroupName,
-          containerGroupName: model.Name,
-        },
-        payload
-      ).$promise;
-    };
+  async function containerGroup(subscriptionId, resourceGroupName, containerGroupName) {
+    const containerGroup = await ContainerGroup.get({ subscriptionId, resourceGroupName, containerGroupName }).$promise;
+    return new ContainerGroupViewModel(containerGroup);
+  }
 
-    return service;
-  },
-]);
+  function create(model, subscriptionId, resourceGroupName) {
+    const payload = new CreateContainerGroupRequest(model);
+    return ContainerGroup.create(
+      {
+        subscriptionId,
+        resourceGroupName,
+        containerGroupName: model.Name,
+      },
+      payload
+    ).$promise;
+  }
+}
