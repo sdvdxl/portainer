@@ -1,39 +1,40 @@
-export function ContainerInstancesViewController($state, AzureService, Notifications) {
-  const vm = this;
+export class ContainerInstancesViewController {
+  constructor($state, AzureService, Notifications) {
+    Object.assign(this, { $state, AzureService, Notifications });
+    this.deleteAction = this.deleteAction.bind(this);
+    this.$onInit = this.$onInit.bind(this);
+  }
 
-  this.deleteAction = deleteAction;
-  this.$onInit = $onInit;
-
-  function $onInit() {
-    AzureService.subscriptions()
-      .then(function success(data) {
+  $onInit() {
+    this.AzureService.subscriptions()
+      .then((data) => {
         var subscriptions = data;
-        return AzureService.containerGroups(subscriptions);
+        return this.AzureService.containerGroups(subscriptions);
       })
-      .then(function success(data) {
-        vm.containerGroups = AzureService.aggregate(data);
+      .then((data) => {
+        this.containerGroups = this.AzureService.aggregate(data);
       })
-      .catch(function error(err) {
-        Notifications.error('Failure', err, 'Unable to load container groups');
+      .catch((err) => {
+        this.Notifications.error('Failure', err, 'Unable to load container groups');
       });
   }
 
-  function deleteAction(selectedItems) {
+  deleteAction(selectedItems) {
     var actionCount = selectedItems.length;
     angular.forEach(selectedItems, function (item) {
-      AzureService.deleteContainerGroup(item.Id)
-        .then(function success() {
-          Notifications.success('Container group successfully removed', item.Name);
-          var index = vm.containerGroups.indexOf(item);
-          vm.containerGroups.splice(index, 1);
+      this.AzureService.deleteContainerGroup(item.Id)
+        .then(() => {
+          this.Notifications.success('Container group successfully removed', item.Name);
+          var index = this.containerGroups.indexOf(item);
+          this.containerGroups.splice(index, 1);
         })
-        .catch(function error(err) {
-          Notifications.error('Failure', err, 'Unable to remove container group');
+        .catch((err) => {
+          this.Notifications.error('Failure', err, 'Unable to remove container group');
         })
         .finally(function final() {
           --actionCount;
           if (actionCount === 0) {
-            $state.reload();
+            this.$state.reload();
           }
         });
     });
