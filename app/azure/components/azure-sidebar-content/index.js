@@ -1,7 +1,7 @@
 import angular from 'angular';
 
 angular.module('portainer.azure').component('azureSidebarContent', {
-  templateUrl: './azureSidebarContent.html',
+  templateUrl: './template.html',
   bindings: {
     endpointId: '<',
   },
