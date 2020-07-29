@@ -1,35 +1,25 @@
+import angular from 'angular';
 import { SubscriptionViewModel } from '../models/subscription';
 
-angular.module('portainer.azure').factory('SubscriptionService', [
-  '$q',
-  'Subscription',
-  function SubscriptionServiceFactory($q, Subscription) {
-    'use strict';
-    var service = {};
+angular.module('portainer.azure').factory('SubscriptionService', SubscriptionServiceFactory);
 
-    service.subscriptions = function () {
-      var deferred = $q.defer();
+function SubscriptionServiceFactory(Subscription) {
+  return {
+    subscriptions,
+    subscription,
+  };
 
-      Subscription.query({})
-        .$promise.then(function success(data) {
-          var subscriptions = data.value.map(function (item) {
-            return new SubscriptionViewModel(item);
-          });
-          deferred.resolve(subscriptions);
-        })
-        .catch(function error(err) {
-          deferred.reject({ msg: 'Unable to retrieve subscriptions', err: err });
-        });
-
-      return deferred.promise;
-    };
-
-    service.subscription = subscription;
-    async function subscription(id) {
-      const subscription = await Subscription.get({ id }).$promise;
-      return new SubscriptionViewModel(subscription);
+  async function subscriptions() {
+    try {
+      const results = await Subscription.query({}).$promise;
+      return results.value.map((item) => new SubscriptionViewModel(item));
+    } catch (err) {
+      throw { msg: 'Unable to retrieve subscriptions', err };
     }
+  }
 
-    return service;
-  },
-]);
+  async function subscription(id) {
+    const subscription = await Subscription.get({ id }).$promise;
+    return new SubscriptionViewModel(subscription);
+  }
+}
