@@ -1,90 +1,93 @@
 import { ContainerGroupDefaultModel } from '../../../models/container_group';
 
-export function CreateContainerInstanceViewController($q, $state, AzureService, Notifications) {
-  var allResourceGroups = [];
-  var allProviders = [];
+export class CreateContainerInstanceViewController {
+  constructor($q, $state, AzureService, Notifications) {
+    Object.assign(this, { $q, $state, AzureService, Notifications });
+    this.allResourceGroups = [];
+    this.allProviders = [];
 
-  this.state = {
-    actionInProgress: false,
-    selectedSubscription: null,
-    selectedResourceGroup: null,
-  };
+    this.state = {
+      actionInProgress: false,
+      selectedSubscription: null,
+      selectedResourceGroup: null,
+    };
 
-  this.changeSubscription = changeSubscription;
-  function changeSubscription() {
-    var selectedSubscription = this.state.selectedSubscription;
-    this.updateResourceGroupsAndLocations(selectedSubscription, allResourceGroups, allProviders);
+    this.changeSubscription = this.changeSubscription.bind(this);
+    this.addPortBinding = this.addPortBinding.bind(this);
+    this.removePortBinding = this.removePortBinding.bind(this);
+    this.create = this.create.bind(this);
+    this.updateResourceGroupsAndLocations = this.updateResourceGroupsAndLocations.bind(this);
   }
 
-  this.addPortBinding = addPortBinding;
-  function addPortBinding() {
+  changeSubscription() {
+    const selectedSubscription = this.state.selectedSubscription;
+    this.updateResourceGroupsAndLocations(selectedSubscription, this.allResourceGroups, this.allProviders);
+  }
+
+  addPortBinding() {
     this.model.Ports.push({ host: '', container: '', protocol: 'TCP' });
   }
 
-  this.removePortBinding = removePortBinding;
-  function removePortBinding(index) {
+  removePortBinding(index) {
     this.model.Ports.splice(index, 1);
   }
 
-  this.create = create;
-  function create() {
-    var model = this.model;
-    var subscriptionId = this.state.selectedSubscription.Id;
-    var resourceGroupName = this.state.selectedResourceGroup.Name;
+  create() {
+    const model = this.model;
+    const subscriptionId = this.state.selectedSubscription.Id;
+    const resourceGroupName = this.state.selectedResourceGroup.Name;
 
     this.state.actionInProgress = true;
-    AzureService.createContainerGroup(model, subscriptionId, resourceGroupName)
+    this.AzureService.createContainerGroup(model, subscriptionId, resourceGroupName)
       .then(() => {
-        Notifications.success('Container successfully created', model.Name);
-        $state.go('azure.containerinstances');
+        this.Notifications.success('Container successfully created', model.Name);
+        this.$state.go('azure.containerinstances');
       })
       .catch((err) => {
-        Notifications.error('Failure', err, 'Unable to create container');
+        this.Notifications.error('Failure', err, 'Unable to create container');
       })
-      .finally(function final() {
+      .finally(() => {
         this.state.actionInProgress = false;
       });
   }
 
-  this.updateResourceGroupsAndLocations = updateResourceGroupsAndLocations;
-  function updateResourceGroupsAndLocations(subscription, resourceGroups, providers) {
+  updateResourceGroupsAndLocations(subscription, resourceGroups, providers) {
     this.state.selectedResourceGroup = resourceGroups[subscription.Id][0];
     this.resourceGroups = resourceGroups[subscription.Id];
 
-    var currentSubLocations = providers[subscription.Id].Locations;
+    const currentSubLocations = providers[subscription.Id].Locations;
     this.model.Location = currentSubLocations[0];
     this.locations = currentSubLocations;
   }
 
-  this.$onInit = $onInit;
-  function $onInit() {
-    var model = new ContainerGroupDefaultModel();
+  $onInit() {
+    const model = new ContainerGroupDefaultModel();
 
-    AzureService.subscriptions()
+    this.AzureService.subscriptions()
       .then((data) => {
-        var subscriptions = data;
+        const subscriptions = data;
         this.state.selectedSubscription = subscriptions[0];
         this.subscriptions = subscriptions;
 
-        return $q.all({
-          resourceGroups: AzureService.resourceGroups(subscriptions),
-          containerInstancesProviders: AzureService.containerInstanceProvider(subscriptions),
+        return this.$q.all({
+          resourceGroups: this.AzureService.resourceGroups(subscriptions),
+          containerInstancesProviders: this.AzureService.containerInstanceProvider(subscriptions),
         });
       })
       .then((data) => {
-        var resourceGroups = data.resourceGroups;
-        allResourceGroups = resourceGroups;
+        const resourceGroups = data.resourceGroups;
+        this.allResourceGroups = resourceGroups;
 
-        var containerInstancesProviders = data.containerInstancesProviders;
-        allProviders = containerInstancesProviders;
+        const containerInstancesProviders = data.containerInstancesProviders;
+        this.allProviders = containerInstancesProviders;
 
         this.model = model;
 
-        var selectedSubscription = this.state.selectedSubscription;
+        const selectedSubscription = this.state.selectedSubscription;
         this.updateResourceGroupsAndLocations(selectedSubscription, resourceGroups, containerInstancesProviders);
       })
       .catch((err) => {
-        Notifications.error('Failure', err, 'Unable to retrieve Azure resources');
+        this.Notifications.error('Failure', err, 'Unable to retrieve Azure resources');
       });
   }
 }
