@@ -1,72 +1,60 @@
-angular.module('portainer.azure').factory('AzureService', [
-  '$q',
-  'Azure',
-  'SubscriptionService',
-  'ResourceGroupService',
-  'ContainerGroupService',
-  'ProviderService',
-  function AzureServiceFactory($q, Azure, SubscriptionService, ResourceGroupService, ContainerGroupService, ProviderService) {
-    'use strict';
-    var service = {};
+import angular from 'angular';
 
-    service.deleteContainerGroup = function (id) {
-      return Azure.delete(id, '2018-04-01');
-    };
+angular.module('portainer.azure').factory('AzureService', AzureServiceFactory);
 
-    service.createContainerGroup = function (model, subscriptionId, resourceGroupName) {
-      return ContainerGroupService.create(model, subscriptionId, resourceGroupName);
-    };
+function AzureServiceFactory(Azure, SubscriptionService, ResourceGroupService, ContainerGroupService, ProviderService) {
+  return { deleteContainerGroup, createContainerGroup, subscriptions, containerInstanceProvider, resourceGroups, containerGroups, aggregate };
 
-    service.subscriptions = function () {
-      return SubscriptionService.subscriptions();
-    };
+  function deleteContainerGroup(id) {
+    return Azure.delete(id, '2018-04-01');
+  }
 
-    service.containerInstanceProvider = function (subscriptions) {
-      return retrieveResourcesForEachSubscription(subscriptions, ProviderService.containerInstanceProvider);
-    };
+  function createContainerGroup(model, subscriptionId, resourceGroupName) {
+    return ContainerGroupService.create(model, subscriptionId, resourceGroupName);
+  }
 
-    service.resourceGroups = function (subscriptions) {
-      return retrieveResourcesForEachSubscription(subscriptions, ResourceGroupService.resourceGroups);
-    };
+  function subscriptions() {
+    return SubscriptionService.subscriptions();
+  }
 
-    service.containerGroups = function (subscriptions) {
-      return retrieveResourcesForEachSubscription(subscriptions, ContainerGroupService.containerGroups);
-    };
+  function containerInstanceProvider(subscriptions) {
+    return retrieveResourcesForEachSubscription(subscriptions, ProviderService.containerInstanceProvider);
+  }
 
-    service.aggregate = function (resourcesBySubcription) {
-      var aggregatedResources = [];
-      Object.keys(resourcesBySubcription).forEach(function (key) {
-        aggregatedResources = aggregatedResources.concat(resourcesBySubcription[key]);
-      });
-      return aggregatedResources;
-    };
+  function resourceGroups(subscriptions) {
+    return retrieveResourcesForEachSubscription(subscriptions, ResourceGroupService.resourceGroups);
+  }
 
-    function retrieveResourcesForEachSubscription(subscriptions, resourceQuery) {
-      var deferred = $q.defer();
+  function containerGroups(subscriptions) {
+    return retrieveResourcesForEachSubscription(subscriptions, ContainerGroupService.containerGroups);
+  }
 
-      var resources = {};
+  function aggregate(resourcesBySubscription) {
+    var aggregatedResources = [];
+    Object.keys(resourcesBySubscription).forEach(function (key) {
+      aggregatedResources = aggregatedResources.concat(resourcesBySubscription[key]);
+    });
+    return aggregatedResources;
+  }
 
-      var resourceQueries = [];
-      for (var i = 0; i < subscriptions.length; i++) {
-        var subscription = subscriptions[i];
-        resourceQueries.push(resourceQuery(subscription.Id));
-      }
+  async function retrieveResourcesForEachSubscription(subscriptions, resourceQuery) {
+    const resources = {};
 
-      $q.all(resourceQueries)
-        .then(function success(data) {
-          for (var i = 0; i < data.length; i++) {
-            var result = data[i];
-            resources[subscriptions[i].Id] = result;
-          }
-          deferred.resolve(resources);
-        })
-        .catch(function error(err) {
-          deferred.reject({ msg: 'Unable to retrieve resources', err: err });
-        });
-
-      return deferred.promise;
+    const resourceQueries = [];
+    for (let i = 0; i < subscriptions.length; i++) {
+      const subscription = subscriptions[i];
+      resourceQueries.push(resourceQuery(subscription.Id));
     }
 
-    return service;
-  },
-]);
+    try {
+      const queriesResults = await Promise.all(resourceQueries);
+      for (let i = 0; i < queriesResults.length; i++) {
+        const result = queriesResults[i];
+        resources[subscriptions[i].Id] = result;
+      }
+      return resources;
+    } catch (err) {
+      throw { msg: 'Unable to retrieve resources', err };
+    }
+  }
+}
