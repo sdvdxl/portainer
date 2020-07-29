@@ -1,8 +1,8 @@
 import { ContainerGroupDefaultModel } from '../../../models/container_group';
 
 export class CreateContainerInstanceViewController {
-  constructor($q, $state, AzureService, Notifications) {
-    Object.assign(this, { $q, $state, AzureService, Notifications });
+  constructor($async, $q, $state, AzureService, Notifications) {
+    Object.assign(this, { $async, $q, $state, AzureService, Notifications });
     this.allResourceGroups = [];
     this.allProviders = [];
 
@@ -16,6 +16,7 @@ export class CreateContainerInstanceViewController {
     this.addPortBinding = this.addPortBinding.bind(this);
     this.removePortBinding = this.removePortBinding.bind(this);
     this.create = this.create.bind(this);
+    this.createAsync = this.createAsync.bind(this);
     this.updateResourceGroupsAndLocations = this.updateResourceGroupsAndLocations.bind(this);
   }
 
@@ -33,22 +34,22 @@ export class CreateContainerInstanceViewController {
   }
 
   create() {
+    return this.$async(this.createAsync);
+  }
+  async createAsync() {
     const model = this.model;
     const subscriptionId = this.state.selectedSubscription.Id;
     const resourceGroupName = this.state.selectedResourceGroup.Name;
 
     this.state.actionInProgress = true;
-    this.AzureService.createContainerGroup(model, subscriptionId, resourceGroupName)
-      .then(() => {
-        this.Notifications.success('Container successfully created', model.Name);
-        this.$state.go('azure.containerinstances');
-      })
-      .catch((err) => {
-        this.Notifications.error('Failure', err, 'Unable to create container');
-      })
-      .finally(() => {
-        this.state.actionInProgress = false;
-      });
+    try {
+      await this.AzureService.createContainerGroup(model, subscriptionId, resourceGroupName);
+      this.Notifications.success('Container successfully created', model.Name);
+      this.$state.go('azure.containerinstances');
+    } catch (err) {
+      this.Notifications.error('Failure', err, 'Unable to create container');
+    }
+    this.state.actionInProgress = false;
   }
 
   updateResourceGroupsAndLocations(subscription, resourceGroups, providers) {
