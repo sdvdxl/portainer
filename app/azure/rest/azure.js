@@ -10,7 +10,7 @@ function AzureFactory($http, API_ENDPOINT_ENDPOINTS, EndpointProvider) {
     const url = `${API_ENDPOINT_ENDPOINTS}/${endpointId}/azure${id}?api-version=${apiVersion}`;
     return $http({
       method: 'DELETE',
-      url: url,
+      url,
     });
   }
 }
