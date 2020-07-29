@@ -1,9 +1,10 @@
-angular.module('portainer.azure').controller('AzureContainerInstancesController', AzureContainerInstancesController);
-
-function AzureContainerInstancesController($state, AzureService, Notifications) {
+export function ContainerInstancesViewController($state, AzureService, Notifications) {
   const vm = this;
 
-  function initView() {
+  this.deleteAction = deleteAction;
+  this.$onInit = $onInit;
+
+  function $onInit() {
     AzureService.subscriptions()
       .then(function success(data) {
         var subscriptions = data;
@@ -17,7 +18,6 @@ function AzureContainerInstancesController($state, AzureService, Notifications) 
       });
   }
 
-  this.deleteAction = deleteAction;
   function deleteAction(selectedItems) {
     var actionCount = selectedItems.length;
     angular.forEach(selectedItems, function (item) {
@@ -38,6 +38,4 @@ function AzureContainerInstancesController($state, AzureService, Notifications) 
         });
     });
   }
-
-  initView();
 }
