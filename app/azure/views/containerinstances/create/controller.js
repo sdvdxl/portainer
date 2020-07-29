@@ -1,8 +1,6 @@
 import { ContainerGroupDefaultModel } from '../../../models/container_group';
 
-angular.module('portainer.azure').controller('AzureCreateContainerInstanceController', AzureCreateContainerInstanceController);
-
-function AzureCreateContainerInstanceController($q, $state, AzureService, Notifications) {
+export function CreateContainerInstanceViewController($q, $state, AzureService, Notifications) {
   var allResourceGroups = [];
   var allProviders = [];
 
