@@ -61,34 +61,25 @@ export class CreateContainerInstanceViewController {
     this.locations = currentSubLocations;
   }
 
-  $onInit() {
-    const model = new ContainerGroupDefaultModel();
+  async $onInit() {
+    this.model = new ContainerGroupDefaultModel();
 
-    this.AzureService.subscriptions()
-      .then((data) => {
-        const subscriptions = data;
-        this.state.selectedSubscription = subscriptions[0];
-        this.subscriptions = subscriptions;
+    try {
+      const subscriptions = await this.AzureService.subscriptions();
+      this.state.selectedSubscription = subscriptions[0];
+      this.subscriptions = subscriptions;
 
-        return this.$q.all({
-          resourceGroups: this.AzureService.resourceGroups(subscriptions),
-          containerInstancesProviders: this.AzureService.containerInstanceProvider(subscriptions),
-        });
-      })
-      .then((data) => {
-        const resourceGroups = data.resourceGroups;
-        this.allResourceGroups = resourceGroups;
+      const [resourceGroups, containerInstancesProviders] = await Promise.all([
+        this.AzureService.resourceGroups(subscriptions),
+        this.AzureService.containerInstanceProvider(subscriptions),
+      ]);
 
-        const containerInstancesProviders = data.containerInstancesProviders;
-        this.allProviders = containerInstancesProviders;
-
-        this.model = model;
-
-        const selectedSubscription = this.state.selectedSubscription;
-        this.updateResourceGroupsAndLocations(selectedSubscription, resourceGroups, containerInstancesProviders);
-      })
-      .catch((err) => {
-        this.Notifications.error('Failure', err, 'Unable to retrieve Azure resources');
-      });
+      this.allResourceGroups = resourceGroups;
+      this.allProviders = containerInstancesProviders;
+      const selectedSubscription = this.state.selectedSubscription;
+      this.updateResourceGroupsAndLocations(selectedSubscription, resourceGroups, containerInstancesProviders);
+    } catch (err) {
+      this.Notifications.error('Failure', err, 'Unable to retrieve Azure resources');
+    }
   }
 }
