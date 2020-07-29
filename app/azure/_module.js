@@ -63,7 +63,7 @@ angular.module('portainer.azure', ['portainer.app']).config([
       url: '/dashboard',
       views: {
         'content@': {
-          templateUrl: './views/dashboard/dashboard.html',
+          templateUrl: './views/dashboard/template.html',
           controller: 'AzureDashboardController',
         },
       },
