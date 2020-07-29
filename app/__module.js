@@ -7,7 +7,7 @@ import './matomo-setup';
 import './assets/js/angulartics-matomo';
 
 import './agent';
-import './azure/_module';
+import './azure';
 import './docker/__module';
 import './edge/__module';
 import './portainer/__module';
