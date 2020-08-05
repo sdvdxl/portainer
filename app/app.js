@@ -12,27 +12,27 @@ function run($rootScope, $state, $interval, LocalStorage, EndpointProvider, Syst
 
   // Workaround to prevent the loading bar from going backward
   // https://github.com/chieffancypants/angular-loading-bar/issues/273
-  var originalSet = cfpLoadingBar.set;
+  const originalSet = cfpLoadingBar.set;
   cfpLoadingBar.set = function overrideSet(n) {
     if (n > cfpLoadingBar.status()) {
       originalSet.apply(cfpLoadingBar, arguments);
     }
   };
 
-  $transitions.onBefore({}, function () {
+  $transitions.onBefore({}, () => {
     HttpRequestHelper.resetAgentHeaders();
   });
 
-  $state.defaultErrorHandler(function () {
+  $state.defaultErrorHandler(() => {
     // Do not log transitionTo errors
   });
 
   // Keep-alive Edge endpoints by sending a ping request every minute
-  $interval(function () {
+  $interval(() => {
     ping(EndpointProvider, SystemService);
   }, 60 * 1000);
 
-  $(document).ajaxSend(function (event, jqXhr, jqOpts) {
+  $(document).ajaxSend((event, jqXhr, jqOpts) => {
     const type = jqOpts.type === 'POST' || jqOpts.type === 'PUT' || jqOpts.type === 'PATCH';
     const hasNoContentType = jqOpts.contentType !== 'application/json' && jqOpts.headers && !jqOpts.headers['Content-Type'];
     if (type && hasNoContentType) {
@@ -43,7 +43,7 @@ function run($rootScope, $state, $interval, LocalStorage, EndpointProvider, Syst
 }
 
 function ping(EndpointProvider, SystemService) {
-  let endpoint = EndpointProvider.currentEndpoint();
+  const endpoint = EndpointProvider.currentEndpoint();
   if (endpoint !== undefined && endpoint.Type === 4) {
     SystemService.ping(endpoint.Id);
   }

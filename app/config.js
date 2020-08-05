@@ -27,7 +27,7 @@ function config($urlRouterProvider, $httpProvider, localStorageServiceProvider, 
   $httpProvider.interceptors.push(
     /* @ngInject */ function (HttpRequestHelper) {
       return {
-        request: function (config) {
+        request(config) {
           if (config.url.indexOf('/docker/') > -1) {
             config.headers['X-PortainerAgent-Target'] = HttpRequestHelper.portainerAgentTargetHeader();
             if (HttpRequestHelper.portainerAgentManagerOperation()) {
