@@ -5,6 +5,7 @@ import * as fit from 'xterm/lib/addons/fit/fit';
 
 angular.module('portainer').config(config);
 
+/* @ngInject */
 function config($urlRouterProvider, $httpProvider, localStorageServiceProvider, jwtOptionsProvider, $uibTooltipProvider, $compileProvider, cfpLoadingBarProvider) {
   var environment = '@@ENVIRONMENT';
   if (environment === 'production') {
