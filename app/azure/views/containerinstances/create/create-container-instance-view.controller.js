@@ -1,6 +1,6 @@
 import { ContainerGroupDefaultModel } from '../../../models/container_group';
 
-export class CreateContainerInstanceViewController {
+export default class CreateContainerInstanceViewController {
   constructor($async, $q, $state, AzureService, Notifications) {
     Object.assign(this, { $async, $q, $state, AzureService, Notifications });
     this.allResourceGroups = [];

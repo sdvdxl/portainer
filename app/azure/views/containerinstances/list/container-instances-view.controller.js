@@ -1,6 +1,6 @@
 import _ from 'lodash-es';
 
-export class ContainerInstancesViewController {
+export default class ContainerInstancesViewController {
   constructor($async, $state, AzureService, Notifications) {
     Object.assign(this, { $async, $state, AzureService, Notifications });
 
