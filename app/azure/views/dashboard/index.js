@@ -1,6 +1,6 @@
-import { DashboardController } from './controller.js';
+import controller from './azure-dashboard.controller.js';
 
 angular.module('portainer.azure').component('azureDashboardView', {
-  templateUrl: './template.html',
-  controller: DashboardController,
+  templateUrl: './azure-dashboard.html',
+  controller,
 });

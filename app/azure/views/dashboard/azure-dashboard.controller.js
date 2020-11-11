@@ -1,4 +1,4 @@
-export class DashboardController {
+export default class DashboardController {
   constructor(AzureService, Notifications) {
     Object.assign(this, { AzureService, Notifications });
   }
