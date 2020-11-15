@@ -1,8 +1,5 @@
-import angular from 'angular';
-
-angular.module('portainer.azure').factory('Subscription', SubscriptionFactory);
-
-function SubscriptionFactory($resource, API_ENDPOINT_ENDPOINTS, EndpointProvider) {
+/* @ngInject */
+export function Subscription($resource, API_ENDPOINT_ENDPOINTS, EndpointProvider) {
   return $resource(
     `${API_ENDPOINT_ENDPOINTS}/:endpointId/azure/subscriptions/:id`,
     {

@@ -1,8 +1,5 @@
-import angular from 'angular';
-
-angular.module('portainer.azure').factory('ContainerGroup', ContainerGroupFactory);
-
-function ContainerGroupFactory($resource, API_ENDPOINT_ENDPOINTS, EndpointProvider) {
+/* @ngInject */
+export function ContainerGroup($resource, API_ENDPOINT_ENDPOINTS, EndpointProvider) {
   const base = $resource(
     `${API_ENDPOINT_ENDPOINTS}/:endpointId/azure/subscriptions/:subscriptionId/providers/Microsoft.ContainerInstance/containerGroups`,
     {

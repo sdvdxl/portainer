@@ -1,8 +1,5 @@
-import angular from 'angular';
-
-angular.module('portainer.azure').factory('Azure', AzureFactory);
-
-function AzureFactory($http, API_ENDPOINT_ENDPOINTS, EndpointProvider) {
+/* @ngInject */
+export function Azure($http, API_ENDPOINT_ENDPOINTS, EndpointProvider) {
   return { delete: deleteItem };
 
   function deleteItem(id, apiVersion) {
