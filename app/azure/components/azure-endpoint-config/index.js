@@ -1,10 +1,8 @@
-import angular from 'angular';
-
-angular.module('portainer.azure').component('azureEndpointConfig', {
+export const azureEndpointConfig = {
   bindings: {
     applicationId: '=',
     tenantId: '=',
     authenticationKey: '=',
   },
   templateUrl: './azure-endpoint-config.html',
-});
+};
