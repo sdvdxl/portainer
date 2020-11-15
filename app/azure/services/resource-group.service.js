@@ -1,10 +1,7 @@
-import angular from 'angular';
-
 import { ResourceGroupViewModel } from '../models/resource_group';
 
-angular.module('portainer.azure').factory('ResourceGroupService', ResourceGroupServiceFactory);
-
-function ResourceGroupServiceFactory(ResourceGroup) {
+/* @ngInject */
+export function ResourceGroupService(ResourceGroup) {
   return { resourceGroups, resourceGroup };
 
   async function resourceGroups(subscriptionId) {

@@ -1,9 +1,7 @@
-import angular from 'angular';
 import { SubscriptionViewModel } from '../models/subscription';
 
-angular.module('portainer.azure').factory('SubscriptionService', SubscriptionServiceFactory);
-
-function SubscriptionServiceFactory(Subscription) {
+/* @ngInject */
+export function SubscriptionService(Subscription) {
   return {
     subscriptions,
     subscription,

@@ -1,8 +1,5 @@
-import angular from 'angular';
-
-angular.module('portainer.azure').factory('AzureService', AzureServiceFactory);
-
-function AzureServiceFactory(Azure, SubscriptionService, ResourceGroupService, ContainerGroupService, ProviderService) {
+/* @ngInject */
+export function AzureService(Azure, SubscriptionService, ResourceGroupService, ContainerGroupService, ProviderService) {
   return { deleteContainerGroup, createContainerGroup, subscriptions, containerInstanceProvider, resourceGroups, containerGroups, aggregate };
 
   function deleteContainerGroup(id) {

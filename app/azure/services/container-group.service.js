@@ -1,10 +1,7 @@
-import angular from 'angular';
-
 import { ContainerGroupViewModel, CreateContainerGroupRequest } from '../models/container_group';
 
-angular.module('portainer.azure').factory('ContainerGroupService', ContainerGroupServiceFactory);
-
-function ContainerGroupServiceFactory(ContainerGroup) {
+/* @ngInject */
+export function ContainerGroupService(ContainerGroup) {
   return { containerGroups, containerGroup, create };
 
   async function containerGroups(subscriptionId) {

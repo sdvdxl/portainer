@@ -1,9 +1,7 @@
-import angular from 'angular';
 import { ContainerInstanceProviderViewModel } from '../models/provider';
 
-angular.module('portainer.azure').factory('ProviderService', ProviderServiceFactory);
-
-function ProviderServiceFactory(Provider) {
+/* @ngInject */
+export function ProviderService(Provider) {
   return { containerInstanceProvider };
 
   async function containerInstanceProvider(subscriptionId) {
