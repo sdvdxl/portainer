@@ -7,4 +7,4 @@ import restModule from './rest';
 import servicesModule from './services';
 import viewsModule from './views';
 
-angular.module('portainer.azure', [componentsModule, restModule, servicesModule, viewsModule]).config(config);
+export default angular.module('portainer.azure', [componentsModule, restModule, servicesModule, viewsModule]).config(config).name;
