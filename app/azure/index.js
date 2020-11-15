@@ -5,5 +5,6 @@ import config from './config';
 import componentsModule from './components';
 import restModule from './rest';
 import servicesModule from './services';
+import viewsModule from './views';
 
-angular.module('portainer.azure', [componentsModule, restModule, servicesModule]).config(config);
+angular.module('portainer.azure', [componentsModule, restModule, servicesModule, viewsModule]).config(config);

@@ -1,3 +1,4 @@
+/* @ngInject */
 export default function config($stateRegistryProvider) {
   const azure = {
     name: 'azure',

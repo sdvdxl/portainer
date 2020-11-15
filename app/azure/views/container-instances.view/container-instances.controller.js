@@ -1,6 +1,7 @@
 import _ from 'lodash-es';
 
 export default class ContainerInstancesViewController {
+  /* @ngInject */
   constructor($async, $state, AzureService, Notifications) {
     Object.assign(this, { $async, $state, AzureService, Notifications });
 

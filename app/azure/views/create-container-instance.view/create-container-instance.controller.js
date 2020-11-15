@@ -1,6 +1,7 @@
-import { ContainerGroupDefaultModel } from '../../../models/container_group';
+import { ContainerGroupDefaultModel } from '@/azure/models/container_group';
 
 export default class CreateContainerInstanceViewController {
+  /* @ngInject */
   constructor($async, $q, $state, AzureService, Notifications) {
     Object.assign(this, { $async, $q, $state, AzureService, Notifications });
     this.allResourceGroups = [];

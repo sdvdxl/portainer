@@ -1,4 +1,5 @@
 export default class DashboardController {
+  /* @ngInject */
   constructor(AzureService, Notifications) {
     Object.assign(this, { AzureService, Notifications });
   }
