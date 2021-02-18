@@ -1,12 +1,9 @@
-import angular from 'angular';
 import toastr from 'toastr';
 import { Terminal } from 'xterm';
 import * as fit from 'xterm/lib/addons/fit/fit';
 
-angular.module('portainer').config(config);
-
 /* @ngInject */
-function config($urlRouterProvider, $httpProvider, localStorageServiceProvider, jwtOptionsProvider, $uibTooltipProvider, $compileProvider, cfpLoadingBarProvider) {
+export function configApp($urlRouterProvider, $httpProvider, localStorageServiceProvider, jwtOptionsProvider, $uibTooltipProvider, $compileProvider, cfpLoadingBarProvider) {
   var environment = '@@ENVIRONMENT';
   if (environment === 'production') {
     $compileProvider.debugInfoEnabled(false);

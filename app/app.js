@@ -1,10 +1,7 @@
-import angular from 'angular';
 import $ from 'jquery';
 
-angular.module('portainer').run(run);
-
 /* @ngInject */
-function run($rootScope, $state, $interval, LocalStorage, EndpointProvider, SystemService, cfpLoadingBar, $transitions, HttpRequestHelper) {
+export function onStartupAngular($rootScope, $state, $interval, LocalStorage, EndpointProvider, SystemService, cfpLoadingBar, $transitions, HttpRequestHelper) {
   EndpointProvider.initialize();
 
   $rootScope.$state = $state;
