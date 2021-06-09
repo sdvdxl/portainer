@@ -28,7 +28,7 @@ func (m *Migrator) updateVolumeResourceControlToDB30() error {
 	}
 
 	for _, endpoint := range endpoints {
-		if !endpointutils.IsDocketEndpoint(&endpoint) {
+		if !endpointutils.IsDockerEndpoint(&endpoint) {
 			continue
 		}
 
