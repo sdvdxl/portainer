@@ -366,9 +366,9 @@ func (m *Migrator) Migrate() error {
 		}
 	}
 
-	// Portainer 2.5.0
-	if m.currentDBVersion < 32 {
-		err := m.updateVolumeResourceControlToDB32()
+	// Portainer 2.6.0
+	if m.currentDBVersion < 30 {
+		err := m.updateVolumeResourceControlToDB30()
 		if err != nil {
 			return err
 		}

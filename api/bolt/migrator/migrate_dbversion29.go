@@ -8,7 +8,7 @@ import (
 	snapshotutils "github.com/portainer/portainer/api/internal/snapshot"
 )
 
-func (m *Migrator) updateVolumeResourceControlToDB32() error {
+func (m *Migrator) updateVolumeResourceControlToDB30() error {
 	endpoints, err := m.endpointService.Endpoints()
 	if err != nil {
 		return fmt.Errorf("failed fetching endpoints: %w", err)
