@@ -8,6 +8,28 @@ import (
 	snapshotutils "github.com/portainer/portainer/api/internal/snapshot"
 )
 
+func (m *Migrator) migrateDBVersionToDB30() error {
+	if err := m.migrateSettingsToDB30(); err != nil {
+		return err
+	}
+
+	if err := m.updateVolumeResourceControlToDB30(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Migrator) migrateSettingsToDB30() error {
+	legacySettings, err := m.settingsService.Settings()
+	if err != nil {
+		return err
+	}
+	legacySettings.OAuthSettings.SSO = false
+	legacySettings.OAuthSettings.LogoutURI = ""
+	return m.settingsService.UpdateSettings(legacySettings)
+}
+
 func (m *Migrator) updateVolumeResourceControlToDB30() error {
 	endpoints, err := m.endpointService.Endpoints()
 	if err != nil {
