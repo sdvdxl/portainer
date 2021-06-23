@@ -51,7 +51,7 @@ import (
 
 // Server implements the portainer.Server interface
 type Server struct {
-	AuthorizationService 		*authorization.Service
+	AuthorizationService        *authorization.Service
 	BindAddress                 string
 	AssetsPath                  string
 	Status                      *portainer.Status

@@ -31,6 +31,9 @@ import (
 	"github.com/portainer/portainer/api/oauth"
 )
 
+func init() {
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+}
 func initCLI() *portainer.CLIFlags {
 	var cliService portainer.CLIService = &cli.Service{}
 	flags, err := cliService.ParseFlags(portainer.APIVersion)
