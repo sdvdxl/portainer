@@ -1,11 +1,11 @@
 <rd-header>
-  <rd-header-title title-text="Endpoint details">
-    <a data-toggle="tooltip" title="Refresh" ui-sref="portainer.endpoints.endpoint({id: endpoint.Id})" ui-sref-opts="{reload: true}">
+  <rd-header-title title-text="节点详情">
+    <a data-toggle="tooltip" title="刷新" ui-sref="portainer.endpoints.endpoint({id: endpoint.Id})" ui-sref-opts="{reload: true}">
       <i class="fa fa-sync" aria-hidden="true"></i>
     </a>
   </rd-header-title>
   <rd-header-content>
-    <a ui-sref="portainer.endpoints">Endpoints</a> &gt; <a ui-sref="portainer.endpoints.endpoint({id: endpoint.Id})">{{ endpoint.Name }}</a>
+    <a ui-sref="portainer.endpoints">节点</a> &gt; <a ui-sref="portainer.endpoints.endpoint({id: endpoint.Id})">{{ endpoint.Name }}</a>
   </rd-header-content>
 </rd-header>
 
@@ -94,11 +94,11 @@
       <rd-widget-body>
         <form class="form-horizontal">
           <div class="col-sm-12 form-section-title">
-            Configuration
+            配置
           </div>
           <!-- name-input -->
           <div class="form-group">
-            <label for="container_name" class="col-sm-3 col-lg-2 control-label text-left">Name</label>
+            <label for="container_name" class="col-sm-3 col-lg-2 control-label text-left">名称</label>
             <div class="col-sm-9 col-lg-10">
               <input type="text" class="form-control" id="container_name" ng-model="endpoint.Name" placeholder="e.g. kubernetes-cluster01 / docker-prod01" />
             </div>
@@ -107,7 +107,7 @@
           <!-- endpoint-url-input -->
           <div class="form-group" ng-if="!state.edgeEndpoint">
             <label for="endpoint_url" class="col-sm-3 col-lg-2 control-label text-left">
-              Endpoint URL
+              节点 URL
               <portainer-tooltip
                 position="bottom"
                 message="URL or IP address of a Docker host. The Docker API must be exposed over a TCP port. Please refer to the Docker documentation to configure it."
@@ -121,7 +121,7 @@
                 class="form-control"
                 id="endpoint_url"
                 ng-model="endpoint.URL"
-                placeholder="e.g. 10.0.0.10:2375 or mydocker.mydomain.com:2375"
+                placeholder="例如 10.0.0.10:2375 or mydocker.mydomain.com:2375"
               />
             </div>
           </div>
@@ -129,15 +129,11 @@
           <!-- endpoint-public-url-input -->
           <div class="form-group" ng-if="!state.azureEndpoint">
             <label for="endpoint_public_url" class="col-sm-3 col-lg-2 control-label text-left">
-              Public IP
-              <portainer-tooltip
-                position="bottom"
-                message="URL or IP address where exposed containers will be reachable. This field is optional and will default to the endpoint URL."
-              >
-              </portainer-tooltip>
+              公网地址
+              <portainer-tooltip position="bottom" message="容器可以访问的 URL 或者 IP 。 可选，默认是节点 URL."> </portainer-tooltip>
             </label>
             <div class="col-sm-9 col-lg-10">
-              <input type="text" class="form-control" id="endpoint_public_url" ng-model="endpoint.PublicURL" placeholder="e.g. 10.0.0.10 or mydocker.mydomain.com" />
+              <input type="text" class="form-control" id="endpoint_public_url" ng-model="endpoint.PublicURL" placeholder="例如 10.0.0.10 or mydocker.mydomain.com" />
             </div>
           </div>
           <div class="form-group" ng-if="state.edgeEndpoint">
@@ -165,12 +161,12 @@
             authentication-key="endpoint.AzureCredentials.AuthenticationKey"
           ></azure-endpoint-config>
           <div class="col-sm-12 form-section-title">
-            Metadata
+            元数据
           </div>
           <!-- group -->
           <div class="form-group">
             <label for="endpoint_group" class="col-sm-3 col-lg-2 control-label text-left">
-              Group
+              分组
             </label>
             <div class="col-sm-9 col-lg-10">
               <select ng-options="group.Id as group.Name for group in groups" ng-model="endpoint.GroupId" id="endpoint_group" class="form-control"></select>
@@ -185,7 +181,7 @@
           <!-- endpoint-security -->
           <div ng-if="endpointType === 'remote' && !state.azureEndpoint && !state.kubernetesEndpoint && !state.edgeEndpoint && endpoint.Type !== 6">
             <div class="col-sm-12 form-section-title">
-              Security
+              安全
             </div>
             <por-endpoint-security form-data="formValues.SecurityFormData" endpoint="endpoint"></por-endpoint-security>
           </div>
@@ -199,10 +195,10 @@
                 ng-click="updateEndpoint()"
                 button-spinner="state.actionInProgress"
               >
-                <span ng-hide="state.actionInProgress">Update endpoint</span>
-                <span ng-show="state.actionInProgress">Updating endpoint...</span>
+                <span ng-hide="state.actionInProgress">更新</span>
+                <span ng-show="state.actionInProgress">更新中...</span>
               </button>
-              <a type="button" class="btn btn-default btn-sm" ui-sref="portainer.endpoints">Cancel</a>
+              <a type="button" class="btn btn-default btn-sm" ui-sref="portainer.endpoints">取消</a>
             </div>
           </div>
         </form>

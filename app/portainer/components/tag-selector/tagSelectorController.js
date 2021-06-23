@@ -38,7 +38,7 @@ class TagSelectorController {
       return filteredTags;
     }
 
-    return filteredTags.concat({ Name: `Create "${searchValue}"`, create: true, value: searchValue });
+    return filteredTags.concat({ Name: `创建 "${searchValue}"`, create: true, value: searchValue });
   }
 
   generateSelectedTags(model, tags) {

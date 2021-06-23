@@ -569,7 +569,7 @@ Cypress.Commands.add('clickLink', (label) => {
 });
 
 Cypress.Commands.add('showAllResources', () => {
-  cy.waitUntil(() => cy.contains('.limitSelector', 'Items per page')).within(() => {
+  cy.waitUntil(() => cy.contains('.limitSelector', '每页数量')).within(() => {
     cy.get('select').select('All');
   });
 });
