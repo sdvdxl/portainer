@@ -61,6 +61,7 @@ func (*Service) ParseFlags(version string) (*portainer.CLIFlags, error) {
 			panic(err)
 		}
 		*flags.Assets = filepath.Join(filepath.Dir(ex), *flags.Assets)
+		log.Println("assets path:", *flags.Assets)
 	}
 
 	return flags, nil
